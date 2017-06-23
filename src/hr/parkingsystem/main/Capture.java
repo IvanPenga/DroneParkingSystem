@@ -101,61 +101,9 @@ public class Capture {
 	
 	
 	
-	CvFont font = opencv_imgproc.cvFont(3);
-	CvScalar color = new CvScalar(0, 0,255, 1);
-	CvPoint markerCenter = new CvPoint();
+
 	
-	private IplImage findMarker(IplImage slika){
-		
-		Marker marker;
-		polje = markerDetector.detect(slika, false);
-		markerDetector.draw(slika, polje);
-
-		boolean markerFound = false;
-
-		for(int i = 0; i<polje.length;i++){
-			if(polje[i].id == 1){
-				marker = polje[i];
-				markerCenter.put((int)marker.getCenter()[0], (int)marker.getCenter()[1]);
-				
-				opencv_imgproc.cvDrawCircle(slika,
-						markerCenter, 
-						5,
-						color,
-						0,0,0);
-				
-				opencv_imgproc.cvPutText(slika, "ID: " + marker.id,
-						markerCenter,
-						font,
-						color);
-				
-				markerFound=true;
-				break;
-			}
-		}
-		
-		if (markerFound){
-			ValidFrame.valid(true);
-		}
-		else{
-			ValidFrame.valid(false);
-		}
-		
-		if (ValidFrame.getValidator()){
-			
-			//drone.getInCenter(getSpeedRatio(markerCenter.x(),markerCenter.y()),getDirection(markerCenter.x(),markerCenter.y()));
-			
-			opencv_imgproc.cvPutText(slika, "Found!",
-					new CvPoint(300,50),
-					font,
-					color);
-			
-			//drone.landing();
-			
-		}
-		
-		return slika;
-	}
+	
 	
 	final int centerX = 320;
 	final int centerY = 240;

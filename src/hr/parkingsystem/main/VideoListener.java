@@ -20,43 +20,31 @@ import de.yadrone.base.video.ImageListener;
 
 public class VideoListener{
 
-
-	private BufferedImage image = null;
     private IplImage iplImage = null;
+	private Frame frameImage = null;
+	
     private CanvasFrame canvas = new CanvasFrame("DroneParkingSystem",1.0);
 	private OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
-	
-	Marker[] polje;
-	MarkerDetector markerDetector = new MarkerDetector();
+	private Detector detector = new Detector();
 	
     public VideoListener(final IARDrone drone)
     {
     	canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    	drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+    	drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
     	 
         drone.getVideoManager().addImageListener(new ImageListener() {
-            public void imageUpdated(BufferedImage newImage)
+            public void imageUpdated(BufferedImage image)
             {
-                image = newImage;
-                iplImage = toIplImage(image);
-                
-        		polje = markerDetector.detect(iplImage, false);
-        		markerDetector.draw(iplImage, polje);
+                iplImage = Helper.toIplImage(image);
         		
-        		Frame frameImage = converter.convert(iplImage);
+        		frameImage = converter.convert(detector.findMarker(iplImage));
         		canvas.showImage(frameImage);
 
             }
         });       
     }
     
-	IplImage toIplImage(BufferedImage bufImage) {
-
-	    ToIplImage iplConverter = new OpenCVFrameConverter.ToIplImage();
-	    Java2DFrameConverter java2dConverter = new Java2DFrameConverter();
-	    IplImage iplImage = iplConverter.convert(java2dConverter.convert(bufImage));
-	    return iplImage;
-	}
+ 
 	
 
     
