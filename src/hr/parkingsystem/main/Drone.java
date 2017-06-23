@@ -111,4 +111,28 @@ public class Drone {
 	   	
 		new VideoListener(drone);
 	}
+	
+	final int centerX = 320;
+	final int centerY = 240;
+	//omjer lijevo desno naspram gore dole
+	private double getSpeedRatio(double x, double y){	
+		return (Math.abs(centerX-x)) / (Math.abs(centerY-y));
+	}
+	
+	private Direction getDirection(int x, int y){
+		//gore desno
+		if (centerX < x && centerY > y) 
+			return Direction.upright;
+		//dolje desno
+		if (centerX < x && centerY < y) 
+			return Direction.downright;
+		//gore lijevo
+		if (centerX > x && centerY > y) 
+			return Direction.upleft;
+		//dolje lijevo 
+		if (centerX > x && centerY < y) 
+			return Direction.downleft;
+		return null;
+	}
+	
 }

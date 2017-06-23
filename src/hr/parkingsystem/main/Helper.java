@@ -17,3 +17,10 @@ public class Helper {
 	}
    
 }
+
+enum Direction{
+	downright,
+	downleft,
+	upleft,
+	upright
+}
