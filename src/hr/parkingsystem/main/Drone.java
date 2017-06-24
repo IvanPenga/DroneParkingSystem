@@ -3,6 +3,7 @@ package hr.parkingsystem.main;
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
+import de.yadrone.base.command.LandCommand;
 import de.yadrone.base.navdata.AttitudeListener;
 import de.yadrone.base.navdata.NavDataManager;
 import de.yadrone.base.navdata.Zimmu3000Listener;
@@ -57,6 +58,9 @@ public class Drone {
 		}
 	}
 	
+	public static void land(){
+		cmd = drone.getCommandManager().landing();
+	}
 
 
 	public Drone(){
@@ -68,9 +72,14 @@ public class Drone {
 
 	        cmd = drone.getCommandManager();
 	        drone.start();
-	        //ako letimo po zatvorenom
-	        cmd.setOutdoor(false, true);
 	        
+	     
+	        
+	        //ako letimo po zatvorenom
+	        cmd.setOutdoor(false, true);	        
+	        
+	        
+	      
 	        
 	        final NavDataManager data = drone.getNavDataManager();
 	       
@@ -102,6 +111,8 @@ public class Drone {
 				}
 			});	
 	        
+			new VideoListener(drone);
+			 takeOff();
 	    }
 	    catch (Exception exc)
 		{
@@ -109,11 +120,12 @@ public class Drone {
 			exc.printStackTrace();
 		}
 	   	
-		new VideoListener(drone);
+		
 	}
 	
 	final int centerX = 320;
 	final int centerY = 240;
+	
 	//omjer lijevo desno naspram gore dole
 	private double getSpeedRatio(double x, double y){	
 		return (Math.abs(centerX-x)) / (Math.abs(centerY-y));

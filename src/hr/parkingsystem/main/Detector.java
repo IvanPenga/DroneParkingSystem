@@ -62,7 +62,7 @@ public class Detector {
 					font,
 					color);
 			
-			//drone.landing();
+			Drone.land();
 			
 		}
 		

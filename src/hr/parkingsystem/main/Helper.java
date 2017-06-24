@@ -9,8 +9,8 @@ import org.bytedeco.javacv.OpenCVFrameConverter.ToIplImage;
 
 public class Helper {
 
-   static ToIplImage iplConverter = new OpenCVFrameConverter.ToIplImage();
-   static Java2DFrameConverter java2dConverter = new Java2DFrameConverter();
+   final static ToIplImage iplConverter = new OpenCVFrameConverter.ToIplImage();
+   final static Java2DFrameConverter java2dConverter = new Java2DFrameConverter();
    
    static IplImage toIplImage(BufferedImage bufImage) {
 	    return iplConverter.convert(java2dConverter.convert(bufImage));

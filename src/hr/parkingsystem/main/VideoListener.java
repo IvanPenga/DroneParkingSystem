@@ -31,13 +31,15 @@ public class VideoListener{
     {
     	canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     	drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
-    	 
+    	
+    	
         drone.getVideoManager().addImageListener(new ImageListener() {
             public void imageUpdated(BufferedImage image)
             {
                 iplImage = Helper.toIplImage(image);
         		
         		frameImage = converter.convert(detector.findMarker(iplImage));
+        		
         		canvas.showImage(frameImage);
 
             }
