@@ -7,11 +7,7 @@ import javax.swing.WindowConstants;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.bytedeco.javacv.Marker;
-import org.bytedeco.javacv.MarkerDetector;
 import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameConverter.ToIplImage;
 
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.VideoChannel;

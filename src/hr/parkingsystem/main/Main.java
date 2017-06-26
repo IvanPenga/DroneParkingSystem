@@ -1,11 +1,7 @@
 package hr.parkingsystem.main;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,11 +10,10 @@ import org.bytedeco.javacpp.opencv_core;
 
 public class Main {
 	 
-	private static Drone drone;
 	public static void main(String[] args) throws Exception{
 		System.out.println("Starting...");
-		Loader.load(opencv_core.class); 
-		
+		//Loader.load(opencv_core.class); 
+		/*
 		
 	    @SuppressWarnings("resource")
 		ServerSocket serverSocket = new ServerSocket(5000);
@@ -37,7 +32,7 @@ public class Main {
 			};
 		      new Thread(runnable).start(); // start a new thread
 		    }
-
+		*/
 	}
 	
 
@@ -53,8 +48,12 @@ public class Main {
 	      while ((inMsg = socketReader.readLine()) != null) {
 	        System.out.println("Received from  client: " + inMsg);
 	        if ("initiateDrone".equals(inMsg)){
-	        	drone = new Drone();
+	        	Drone.initDrone();
 	        	System.out.println("Drone initiated...");
+	        }
+	        if ("landCommand".equals(inMsg)){
+	        	Drone.land();
+	        	System.out.println("Landing...");
 	        }
 	      }
 	      socket.close();

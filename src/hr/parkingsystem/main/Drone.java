@@ -1,9 +1,11 @@
 package hr.parkingsystem.main;
 
+import java.time.Instant;
+
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
+import de.yadrone.base.command.ATCommand;
 import de.yadrone.base.command.CommandManager;
-import de.yadrone.base.command.LandCommand;
 import de.yadrone.base.navdata.AttitudeListener;
 import de.yadrone.base.navdata.NavDataManager;
 import de.yadrone.base.navdata.Zimmu3000Listener;
@@ -11,8 +13,8 @@ import de.yadrone.base.navdata.Zimmu3000Listener;
 public class Drone {
 	
 	static CommandManager cmd = null;
-	static IARDrone drone = null;
-	public static int speed = 0;
+	public static int speed = 10;
+	private static IARDrone droneInstance = null;
 	
 	public void takeOff(){
 		if (cmd!=null){
@@ -59,24 +61,32 @@ public class Drone {
 	}
 	
 	public static void land(){
-		cmd = drone.getCommandManager().landing();
+		droneInstance.getCommandManager().landing();
 	}
 
-
-	public Drone(){
+	
+	public static void initDrone(){
+		if (droneInstance == null){
+			new Drone();
+		}
+	}
+	
+	private Drone(){
+		
 		
 	   try
 	    {
-	        drone = new ARDrone();
-	        
+		   droneInstance = new ARDrone();
+		   droneInstance.start();
+		 
+		   /*
+	       // cmd = drone.getCommandManager();
 
-	        cmd = drone.getCommandManager();
-	        drone.start();
 	        
 	     
 	        
 	        //ako letimo po zatvorenom
-	        cmd.setOutdoor(false, true);	        
+	       // cmd.setOutdoor(false, true);	        
 	        
 	        
 	      
@@ -110,16 +120,33 @@ public class Drone {
 					
 				}
 			});	
-	        
-			new VideoListener(drone);
-			 takeOff();
+*/	        
+			//new VideoListener(drone);
+			 //takeOff();
+
 	    }
 	    catch (Exception exc)
 		{
 	    	System.out.println("Ne mogu se povezati sa dronom");
 			exc.printStackTrace();
 		}
-	   	
+	   	try{
+	   		droneInstance.getCommandManager().takeOff().doFor(4000);
+		    System.out.println("Take of " + Instant.now());
+		    droneInstance.getCommandManager().hover().doFor(5000);
+		    System.out.println("hover " + Instant.now());
+		    /*
+		    droneInstance.getCommandManager().forward(speed).doFor(2000);
+		    System.out.println("foward" + Instant.now());
+		    droneInstance.getCommandManager().hover().doFor(3000);
+		    System.out.println("hover " + Instant.now());
+		    droneInstance.getCommandManager().landing();
+		    System.out.println("landed" + Instant.now());
+		    */
+	   	}
+	   	catch(Exception ex){
+		    
+	   	}
 		
 	}
 	
