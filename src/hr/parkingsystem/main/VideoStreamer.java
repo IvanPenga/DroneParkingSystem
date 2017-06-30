@@ -14,6 +14,11 @@ import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.IARDrone;
+import de.yadrone.base.command.VideoChannel;
+import de.yadrone.base.video.ImageListener;
+
 public class VideoStreamer {
 	
 	private static BufferedImage bufferedImage;
@@ -23,12 +28,10 @@ public class VideoStreamer {
 	private static IplImage iplImage = null;
 	private static Frame frameImage = null;
 	  
-	  
 	private static void getImageFromURL(URL url){
 		
 		while(true){
-				
-			
+							
 			try {
 				bufferedImage = ImageIO.read(url);
 			} catch (UnknownHostException e) {
@@ -52,17 +55,33 @@ public class VideoStreamer {
 	  
 	  public VideoStreamer() throws MalformedURLException
 	  {
-		  	canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		  	//na ovom portu ce Node updateati slike  
-			final URL url = new URL("http://localhost:8080/");
-			new Runnable() {
-				
-				@Override
-				public void run() {
-					
-					getImageFromURL(url);
-					
-				}
-			}.run();	
+		    IARDrone drone = null;
+		    try
+		    {
+		        drone = new ARDrone();
+		        //drone.start();
+		    }
+		    catch (Exception exc)
+			{
+				exc.printStackTrace();
+				System.err.println("Error while initiating drone");
+			}
+		    
+		    canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		    drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
+		    
+		    drone.getVideoManager().addImageListener(new ImageListener() {			
+		    	public void imageUpdated(BufferedImage image)
+	            {
+	                iplImage = Helper.toIplImage(image);
+	        				    			
+	    			frameImage = converter.convert(detector.findMarker(iplImage));
+	    			
+	    			canvas.showImage(frameImage);
+	        		
+	            }
+			});
+		    
+		  		
 	  }
 }
