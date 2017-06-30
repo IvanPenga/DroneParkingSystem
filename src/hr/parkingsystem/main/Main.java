@@ -25,7 +25,7 @@ public class Main {
 		System.out.println("Starting...");
 		Loader.load(opencv_core.class);
 		System.out.println("Ucitao...");
-		VideoStreamer s = new VideoStreamer();
+		new VideoStreamer();
 		
 		//Drone.initDrone();
 		
@@ -68,15 +68,15 @@ public class Main {
 	      while ((inMsg = socketReader.readLine()) != null) {
 	        System.out.println("Received from  client: " + inMsg);
 	        if ("initiateDrone".equals(inMsg)){
-	        	Drone.initDrone();
+	        
 	        	System.out.println("Drone initiated...");
 	        }
 	        if ("landCommand".equals(inMsg)){
-	        	Drone.land();
+	     
 	        	System.out.println("Landing...");
 	        }
 	        if ("emergencyCommand".equals(inMsg)){
-	        	Drone.land();
+	       
 	        	System.out.println("EMERGENCY!");
 	        }
 	      }
