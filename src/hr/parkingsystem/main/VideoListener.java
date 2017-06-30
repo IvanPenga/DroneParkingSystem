@@ -1,6 +1,8 @@
 package hr.parkingsystem.main;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.WindowConstants;
 
@@ -26,7 +28,6 @@ public class VideoListener{
     public VideoListener(final IARDrone drone)
     {
     	canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    	drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
     	
     	
         drone.getVideoManager().addImageListener(new ImageListener() {
@@ -34,16 +35,25 @@ public class VideoListener{
             {
                 iplImage = Helper.toIplImage(image);
         		
-        		frameImage = converter.convert(detector.findMarker(iplImage));
+        		try {
+					frameImage = converter.convert(detector.findMarker(iplImage));
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         		
         		canvas.showImage(frameImage);
 
             }
-        });       
+        }); 
+    	
     }
-    
- 
-	
+    /*
+
+	*/
 
     
 

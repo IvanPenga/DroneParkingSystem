@@ -15,7 +15,25 @@ public class Helper {
    static IplImage toIplImage(BufferedImage bufImage) {
 	    return iplConverter.convert(java2dConverter.convert(bufImage));
 	}
+	
+   final static int centerX = 320;
+   final static int centerY = 240;
    
+   public  static Direction getDirection(int x, int y){
+		//gore desno
+		if (centerX < x && centerY > y) 
+			return Direction.upright;
+		//dolje desno
+		if (centerX < x && centerY < y) 
+			return Direction.downright;
+		//gore lijevo
+		if (centerX > x && centerY > y) 
+			return Direction.upleft;
+		//dolje lijevo 
+		if (centerX > x && centerY < y) 
+			return Direction.downleft;
+		return null;
+	}
 }
 
 enum Direction{

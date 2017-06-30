@@ -1,6 +1,12 @@
 package hr.parkingsystem.main;
 
 import org.bytedeco.javacpp.opencv_imgproc;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import org.bytedeco.javacpp.opencv_core.CvPoint;
 import org.bytedeco.javacpp.opencv_core.CvScalar;
 import org.bytedeco.javacpp.opencv_core.IplImage;
@@ -16,14 +22,19 @@ public class Detector {
 	private CvFont font = opencv_imgproc.cvFont(3);
 	private CvScalar color = new CvScalar(0, 0,255, 1);
 	private CvPoint markerCenter = new CvPoint();
+	private boolean markerFound = false;
+	private Marker marker;
 	
 	public IplImage findMarker(IplImage image){
+				
+		if (image == null){
+			return null;
+		} 
 		
-		Marker marker;
 		polje = markerDetector.detect(image, false);
 		markerDetector.draw(image, polje);
 
-		boolean markerFound = false;
+		markerFound = false;
 
 		for(int i = 0; i<polje.length;i++){
 			if(polje[i].id == 1){
@@ -54,16 +65,26 @@ public class Detector {
 		}
 		
 		if (ValidFrame.getValidator()){
-			
-			//drone.getInCenter(getSpeedRatio(markerCenter.x(),markerCenter.y()),getDirection(markerCenter.x(),markerCenter.y()));
-			
+			//getSpeedRatio(markerCenter.x(),markerCenter.y())
+			//Drone.getInCenter(Helper.getDirection(markerCenter.x(),markerCenter.y()));
+			/*
 			opencv_imgproc.cvPutText(image, "Found!",
 					new CvPoint(300,50),
 					font,
 					color);
+			*/
 			
-			Drone.land();
 			
+			try {
+				SocketMessage.getInstance().sendMessage("Hello");
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				System.err.println("Error on creating socket or sending message");
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.err.println("Error on creating socket or sending message");
+			}
+		     		
 		}
 		
 		return image;
