@@ -13,7 +13,8 @@ public class SocketMessage {
 	 
 	 private SocketMessage() throws UnknownHostException, IOException{
 		
-		socket = new Socket ("127.0.0.1", 5000);
+		String address = "192.168.1.200"; //raspberry pi address
+		socket = new Socket (address, 5000);
 		socket.setKeepAlive(true);
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -39,13 +40,11 @@ public class SocketMessage {
 		return socketInstance;
 	}
 	
-	public void sendMessage(String message) throws IOException{
+	public void sendMessage(String message) throws IOException,UnknownHostException{
 		 
-		if (socket.isConnected()){
-			
+		if (socket.isConnected()){			
 			out = new PrintWriter (socket.getOutputStream(), true);	    
-			out.println (message);
-			
+			out.println (message);			
 		}
 		
 	}

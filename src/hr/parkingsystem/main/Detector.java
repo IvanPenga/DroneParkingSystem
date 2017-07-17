@@ -23,6 +23,7 @@ public class Detector {
 	private CvScalar color = new CvScalar(0, 0,255, 1);
 	private CvPoint markerCenter = new CvPoint();
 	private boolean markerFound = false;
+	private Marker carMarker;
 	private Marker marker;
 	
 	public IplImage findMarker(IplImage image){
@@ -40,7 +41,7 @@ public class Detector {
 			if(polje[i].id == 1){
 				marker = polje[i];
 				markerCenter.put((int)marker.getCenter()[0], (int)marker.getCenter()[1]);
-				
+
 				opencv_imgproc.cvDrawCircle(image,
 						markerCenter, 
 						5,
@@ -53,7 +54,21 @@ public class Detector {
 						color);
 				
 				markerFound=true;
-				break;
+				
+			}
+			if (markerFound){
+				if (polje[i].id == 2){
+					//pronaden je i drugi marker i sada mozes sletiti					
+					try {
+						SocketMessage.getInstance().sendMessage("drone_carFound");
+					} catch (UnknownHostException e) {
+						System.err.println("Unknown host");
+						e.printStackTrace();
+					} catch (IOException e) {
+						System.err.println("Error while sending message: drone_carFound");
+						e.printStackTrace();
+					}				
+				}
 			}
 		}
 		
@@ -65,18 +80,12 @@ public class Detector {
 		}
 		
 		if (ValidFrame.getValidator()){
-			//getSpeedRatio(markerCenter.x(),markerCenter.y())
-			//Drone.getInCenter(Helper.getDirection(markerCenter.x(),markerCenter.y()));
-			/*
-			opencv_imgproc.cvPutText(image, "Found!",
-					new CvPoint(300,50),
-					font,
-					color);
-			*/
-			
+			System.out.println(Helper.getDirection((int)marker.getCenter()[0], (int)marker.getCenter()[1]));
+						
+			String direction = Helper.getDirection((int)marker.getCenter()[0], (int)marker.getCenter()[1]).toString();
 			
 			try {
-				SocketMessage.getInstance().sendMessage("Hello");
+				SocketMessage.getInstance().sendMessage("drone_center"); //"drone_"+direction
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 				System.err.println("Error on creating socket or sending message");
@@ -86,7 +95,26 @@ public class Detector {
 			}
 		     		
 		}
-		
 		return image;
+	}
+	
+	public void drawGrid(IplImage image){
+		int width = image.width();
+		int height = image.height();
+		
+		for (int i = width/4; i < width; i+=width/4){
+			opencv_imgproc.cvDrawLine(
+					image,
+					new CvPoint(i, 0), 
+					new CvPoint(i,height),
+					color, 1, 0, 0);	
+		}
+		for (int i = height/4; i < height; i+=height/4){
+			opencv_imgproc.cvDrawLine(
+					image,
+					new CvPoint(0,i), 
+					new CvPoint(width,i),
+					color, 1, 0, 0);	
+		}
 	}
 }

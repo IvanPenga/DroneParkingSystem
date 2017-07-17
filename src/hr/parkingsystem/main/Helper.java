@@ -17,10 +17,27 @@ public class Helper {
 	}
 	
    final static int centerX = 320;
-   final static int centerY = 240;
+   final static int centerY = 180;
+   
+   public static int getSpeedRatio(int x, int y){
+	   int distanceX = Math.abs(centerX-x);
+	   int distanceY = Math.abs(centerY-y);
+	   return 0;
+   }
+   
+   
+   public static boolean insideCircle(int x, int y){
+	   double d = Math.sqrt(Math.pow(x-centerX,2)+Math.pow(y-centerY,2));
+	   if (d < 30){ return true;}
+	   return false;
+   }
+   
    
    public  static Direction getDirection(int x, int y){
-		//gore desno
+		if (insideCircle(x,y)){
+			return Direction.center;
+		}
+	   //gore desno
 		if (centerX < x && centerY > y) 
 			return Direction.upright;
 		//dolje desno
@@ -40,5 +57,6 @@ enum Direction{
 	downright,
 	downleft,
 	upleft,
-	upright
+	upright,
+	center
 }
