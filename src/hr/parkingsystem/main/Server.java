@@ -47,7 +47,6 @@ public class Server {
 	}
 	
 
-
 	  public static void handleClientRequest(Socket socket) {
 	    try{
 	      BufferedReader socketReader = null;

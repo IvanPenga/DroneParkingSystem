@@ -13,8 +13,10 @@ public class SocketMessage {
 	 
 	 private SocketMessage() throws UnknownHostException, IOException{
 		
-		String address = "192.168.1.200"; //raspberry pi address
-		socket = new Socket (address, 5000);
+		String address = "127.0.0.1"; //raspberry pi address 192.168.1.200
+		int port = 5000;
+		
+		socket = new Socket (address, port);
 		socket.setKeepAlive(true);
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){

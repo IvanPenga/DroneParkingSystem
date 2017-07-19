@@ -65,11 +65,10 @@ public class VideoStreamer {
 	}
 
 	
-	
-	  public VideoStreamer() throws IOException
-	  {
-		  
-		    IARDrone drone = null;
+		
+		public VideoStreamer() throws IOException
+		{	  
+			IARDrone drone = null;
 		    try
 		    {
 		        drone = new ARDrone();
@@ -80,7 +79,26 @@ public class VideoStreamer {
 				exc.printStackTrace();
 				System.err.println("Error while initiating drone");
 			}
-		   
+	   
+		    InitCanvas();
+	    
+		    drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
+	    
+		    drone.getVideoManager().addImageListener(new ImageListener() {			
+		    	public void imageUpdated(BufferedImage image)
+		        {
+		            iplImage = Helper.toIplImage(image);
+		    				    			
+					frameImage = converter.convert(detector.findMarker(iplImage)); 
+	    			
+	    			canvas.showImage(frameImage);
+	        			    			
+	            }
+			});		
+	  }
+	  
+	  private void InitCanvas(){
+		  
 		    canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		    canvas.setLayout(null);
 		    
@@ -112,7 +130,7 @@ public class VideoStreamer {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+			
 				}
 			});
 		    
@@ -132,22 +150,5 @@ public class VideoStreamer {
 					
 				}
 			});
-		    
-		    drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
-		    
-		    drone.getVideoManager().addImageListener(new ImageListener() {			
-		    	public void imageUpdated(BufferedImage image)
-	            {
-	                iplImage = Helper.toIplImage(image);
-	        				    			
-	    			frameImage = converter.convert(detector.findMarker(iplImage)); //
-	    			
-	    			canvas.showImage(frameImage);
-	        			    			
-	            }
-			});
-			
-		    
-		  		
 	  }
 }
